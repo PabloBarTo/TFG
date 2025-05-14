@@ -1,0 +1,4 @@
+services:
+  global_page_translate.translate_service:
+    class: Drupal\global_page_translate\Service\TranslateService
+    arguments: ['@http_client', '@config.factory']

@@ -1,0 +1,4 @@
+services:
+  auto_translate.translate_service:
+    class: 'Drupal\auto_translate\Service\TranslateService'
+    arguments: ['@http_client', '@config.factory']

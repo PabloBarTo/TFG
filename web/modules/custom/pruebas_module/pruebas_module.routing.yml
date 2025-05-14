@@ -1,0 +1,7 @@
+pruebas_module.content:
+  path: '/admin/config/modulo-de-pruebas'
+  defaults:
+    _controller: '\Drupal\pruebas_module\controller\PruebasController::content'
+    _tittle: 'Modulo de pruebas'
+  requirements:
+    _permission: 'access content'

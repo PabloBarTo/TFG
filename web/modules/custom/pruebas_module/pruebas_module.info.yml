@@ -1,0 +1,6 @@
+name: Pruebas Module
+description: Modulo de pruebas
+package: Pruebas Module
+
+type: module
+core_version_requirement: ^10 || ^11 || ^12

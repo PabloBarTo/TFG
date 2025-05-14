@@ -1,0 +1,7 @@
+name: 'Auto Translate'
+type: module
+description: 'Módulo de traducción automática'
+core_version_requirement: ^9 || ^10 || ^11 || ^12 
+package: 'Custom'
+dependencies:
+  - drupal:locale

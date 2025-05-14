@@ -1,0 +1,6 @@
+translate_button:
+  version: 1.x
+  js:
+    js/translate.js: {}
+  dependencies:
+    - core/jquery

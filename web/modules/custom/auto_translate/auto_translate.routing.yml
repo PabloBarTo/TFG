@@ -1,0 +1,7 @@
+auto_translate.translate:
+  path: '/auto-translate'
+  defaults:
+    _controller: 'Drupal\auto_translate\Controller\TranslateController::content'
+    _title: 'Traducción automática'
+  requirements:
+    _permission: 'access content'

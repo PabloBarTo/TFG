@@ -1,0 +1,7 @@
+name: 'Global Page Translate'
+type: module
+description: 'Agrega un botón para traducir todo el contenido de la página usando DeepL.'
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:language

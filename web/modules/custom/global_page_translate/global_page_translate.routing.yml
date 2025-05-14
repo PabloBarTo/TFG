@@ -1,0 +1,11 @@
+global_page_translate.translate_content:
+  path: '/translate-content/{langcode}'
+  defaults:
+    _controller: '\Drupal\global_page_translate\Controller\TranslateController::translateContent'
+    _title: 'Traducir contenido'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      langcode:
+        type: 'language'
