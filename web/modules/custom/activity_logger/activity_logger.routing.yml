@@ -1,0 +1,7 @@
+activity_logger.logs_page:
+  path: '/admin/reports/activity-logger'
+  defaults:
+    _controller: '\Drupal\activity_logger\Controller\ActivityLoggerController::logsPage'
+    _title: 'Registro de actividad'
+  requirements:
+    _permission: 'administer site configuration'

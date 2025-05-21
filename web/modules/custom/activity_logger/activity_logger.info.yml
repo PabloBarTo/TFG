@@ -1,0 +1,6 @@
+name: 'Activity Logger'
+type: module
+description: 'Registra cambios realizados en el sitio como creación, edición o eliminación de contenido o cualquier cambio realizado en la página.'
+core_version_requirement: ^9 || ^10 || ^11 || ^12
+package: Custom
+version: 1.0

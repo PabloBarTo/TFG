@@ -1,0 +1,58 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implementa hook_entity_insert().
+ */
+function activity_logger_entity_insert(EntityInterface $entity) {
+  _activity_logger_log('creada', $entity);
+}
+
+/**
+ * Implementa hook_entity_update().
+ */
+function activity_logger_entity_update(EntityInterface $entity) {
+  _activity_logger_log('modificada', $entity);
+}
+
+/**
+ * Implementa hook_entity_delete(EntityInterface $entity).
+ */
+function activity_logger_entity_delete(EntityInterface $entity) {
+  _activity_logger_log('eliminada', $entity);
+}
+
+/**
+ * Función auxiliar para registrar la actividad con más detalles.
+ *
+ * @param string $accion
+ *   Acción realizada: 'creada', 'modificada' o 'eliminada'.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   La entidad afectada.
+ */
+function _activity_logger_log(string $accion, EntityInterface $entity) {
+  $type = $entity->getEntityTypeId();
+  $id = $entity->id();
+  $label = method_exists($entity, 'label') ? $entity->label() : '';
+
+  // Obtener nombre del usuario actual
+  $account = \Drupal::currentUser();
+  $username = $account->getDisplayName();
+
+  // Mensaje base
+  $message = "Entidad $accion: $type con ID $id.";
+  $variables = [];
+
+  if (!empty($label)) {
+    $message .= ' Título: "@title".';
+    $variables['@title'] = $label;
+  }
+
+  if (!empty($username)) {
+    $message .= ' Usuario: @user.';
+    $variables['@user'] = $username;
+  }
+
+  \Drupal::logger('activity_logger')->info($message, $variables);
+}
