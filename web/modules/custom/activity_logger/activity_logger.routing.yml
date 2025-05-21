@@ -1,4 +1,4 @@
-activity_logger.logs_page:
+activity_logger.custom_logs:
   path: '/admin/reports/activity-logger'
   defaults:
     _controller: '\Drupal\activity_logger\Controller\ActivityLoggerController::logsPage'

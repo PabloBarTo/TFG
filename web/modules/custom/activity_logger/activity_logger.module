@@ -34,25 +34,26 @@ function activity_logger_entity_delete(EntityInterface $entity) {
 function _activity_logger_log(string $accion, EntityInterface $entity) {
   $type = $entity->getEntityTypeId();
   $id = $entity->id();
-  $label = method_exists($entity, 'label') ? $entity->label() : '';
+  $label = method_exists($entity, 'label') ? $entity->label() : NULL;
 
-  // Obtener nombre del usuario actual
   $account = \Drupal::currentUser();
   $username = $account->getDisplayName();
+  $uid = $account->id();
 
-  // Mensaje base
-  $message = "Entidad $accion: $type con ID $id.";
-  $variables = [];
+  $request = \Drupal::request();
+  $ip = $request->getClientIp();
 
-  if (!empty($label)) {
-    $message .= ' Título: "@title".';
-    $variables['@title'] = $label;
-  }
-
-  if (!empty($username)) {
-    $message .= ' Usuario: @user.';
-    $variables['@user'] = $username;
-  }
-
-  \Drupal::logger('activity_logger')->info($message, $variables);
+  \Drupal::database()->insert('activity_logger')
+    ->fields([
+      'timestamp' => time(),
+      'action' => $accion,
+      'entity_type' => $type,
+      'entity_id' => $id,
+      'title' => $label,
+      'user_id' => $uid,
+      'username' => $username,
+      'ip' => $ip,
+    ])
+    ->execute();
 }
+

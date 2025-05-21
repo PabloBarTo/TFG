@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Implementa hook_schema().
+ */
+function activity_logger_schema() {
+  $schema['activity_logger'] = [
+    'description' => 'Registro personalizado de actividad del sitio.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'timestamp' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'action' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'entity_type' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ],
+      'entity_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'title' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'username' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'ip' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => FALSE,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}

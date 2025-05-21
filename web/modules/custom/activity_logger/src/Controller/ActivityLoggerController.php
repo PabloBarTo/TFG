@@ -7,68 +7,65 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 
 /**
- * Muestra los logs del módulo Activity Logger.
+ * Muestra los registros del log personalizado.
  */
 class ActivityLoggerController extends ControllerBase {
 
-  /**
-   * La conexión a la base de datos.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
   protected $database;
 
-  /**
-   * Constructor por inyección de dependencias.
-   */
   public function __construct(Connection $database) {
     $this->database = $database;
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database')
     );
   }
 
-  /**
-   * Muestra los logs en una tabla.
-   */
   public function logsPage() {
-    $query = $this->database->select('watchdog', 'w')
-      ->fields('w', ['wid', 'type', 'message', 'variables', 'timestamp'])
-      ->condition('type', 'activity_logger')
-      ->orderBy('timestamp', 'DESC')
-      ->range(0, 50); // Mostrar solo los últimos 50
+    $header = [
+      'id' => $this->t('ID'),
+      'timestamp' => $this->t('Fecha'),
+      'action' => $this->t('Acción'),
+      'entity_type' => $this->t('Entidad'),
+      'entity_id' => $this->t('ID Entidad'),
+      'title' => $this->t('Título'),
+      'username' => $this->t('Usuario'),
+      'ip' => $this->t('IP'),
+    ];
 
-    $result = $query->execute();
+    $query = $this->database->select('activity_logger', 'a')
+      ->fields('a')
+      ->orderBy('timestamp', 'DESC');
 
+    // Añadir paginación (20 registros por página)
+    $pager = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(20);
+
+    $results = $pager->execute();
     $rows = [];
-    foreach ($result as $record) {
-      // Procesar mensaje con placeholders si hay variables
-      $message = $record->message;
-      $variables = unserialize($record->variables ?? '') ?: [];
-    
-      if (!empty($variables)) {
-        $message = \Drupal::translation()->translate($message, $variables);
-      }
-    
+
+    foreach ($results as $record) {
       $rows[] = [
-        $record->wid,
-        $message,
-        date('Y-m-d H:i:s', $record->timestamp),
+        'id' => $record->id,
+        'timestamp' => \Drupal::service('date.formatter')->format($record->timestamp, 'short'),
+        'action' => $record->action,
+        'entity_type' => $record->entity_type,
+        'entity_id' => $record->entity_id,
+        'title' => $record->title ?? '',
+        'username' => $record->username,
+        'ip' => $record->ip,
       ];
     }
 
-    $header = ['ID', 'Mensaje', 'Fecha'];
     return [
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
       '#empty' => $this->t('No se han registrado eventos aún.'),
+      'pager' => [
+        '#type' => 'pager',
+      ],
     ];
   }
 }
