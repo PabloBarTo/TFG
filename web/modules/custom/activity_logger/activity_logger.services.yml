@@ -1,0 +1,5 @@
+services:
+  activity_logger.form.activity_logger_filter_form:
+    class: Drupal\activity_logger\Form\ActivityLoggerFilterForm
+    tags:
+      - { name: form }

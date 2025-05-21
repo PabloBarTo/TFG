@@ -34,17 +34,29 @@ class ActivityLoggerController extends ControllerBase {
       'username' => $this->t('Usuario'),
       'ip' => $this->t('IP'),
     ];
-
+  
+    // Obtener valores de filtro desde la URL
+    $filters = \Drupal::request()->query->all();
+  
     $query = $this->database->select('activity_logger', 'a')
       ->fields('a')
       ->orderBy('timestamp', 'DESC');
-
-    // Añadir paginación (20 registros por página)
+  
+    // Aplicar filtros si están presentes
+    if (!empty($filters['entity_type'])) {
+      $query->condition('entity_type', $filters['entity_type']);
+    }
+    if (!empty($filters['username'])) {
+      $query->condition('username', $filters['username']);
+    }
+    if (!empty($filters['action'])) {
+      $query->condition('action', $filters['action']);
+    }
+  
     $pager = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit(20);
-
     $results = $pager->execute();
+  
     $rows = [];
-
     foreach ($results as $record) {
       $rows[] = [
         'id' => $record->id,
@@ -57,15 +69,19 @@ class ActivityLoggerController extends ControllerBase {
         'ip' => $record->ip,
       ];
     }
-
+  
+    // Formulario de filtros
+    $form = \Drupal::formBuilder()->getForm('Drupal\activity_logger\Form\ActivityLoggerFilterForm');
+  
     return [
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => $rows,
-      '#empty' => $this->t('No se han registrado eventos aún.'),
-      'pager' => [
-        '#type' => 'pager',
+      'filter_form' => $form,
+      'table' => [
+        '#type' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+        '#empty' => $this->t('No se han registrado eventos aún.'),
       ],
+      'pager' => ['#type' => 'pager'],
     ];
   }
 }
