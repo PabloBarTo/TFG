@@ -1,4 +1,16 @@
 services:
+  global_page_translate.request_subscriber:
+    class: Drupal\global_page_translate\EventSubscriber\GlobalPageTranslateRequestSubscriber
+    arguments: ['@language_manager']
+    tags:
+      - { name: event_subscriber }
+
+  global_page_translate.response_subscriber:
+    class: Drupal\global_page_translate\EventSubscriber\GlobalPageTranslateSubscriber
+    arguments: ['@global_page_translate.translate_service']
+    tags:
+      - { name: event_subscriber }
+
   global_page_translate.translate_service:
     class: Drupal\global_page_translate\Service\TranslateService
-    arguments: ['@http_client', '@config.factory']
+    arguments: ['@http_client', '@config.factory', '@string_translation', '@cache.default']

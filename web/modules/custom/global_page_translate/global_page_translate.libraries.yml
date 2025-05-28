@@ -1,4 +1,4 @@
-translate_button:
+translate-button:
   version: 1.x
   js:
     js/translate.js: {}

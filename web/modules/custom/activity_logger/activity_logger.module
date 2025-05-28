@@ -34,6 +34,12 @@ function activity_logger_entity_delete(EntityInterface $entity) {
 function _activity_logger_log(string $accion, EntityInterface $entity) {
   $type = $entity->getEntityTypeId();
   $id = $entity->id();
+
+  // No registrar si no hay ID válido
+  if (!is_numeric($id)) {
+    return;
+  }
+
   $label = method_exists($entity, 'label') ? $entity->label() : NULL;
 
   $account = \Drupal::currentUser();
@@ -48,7 +54,7 @@ function _activity_logger_log(string $accion, EntityInterface $entity) {
       'timestamp' => time(),
       'action' => $accion,
       'entity_type' => $type,
-      'entity_id' => $id,
+      'entity_id' => (int) $id,
       'title' => $label,
       'user_id' => $uid,
       'username' => $username,

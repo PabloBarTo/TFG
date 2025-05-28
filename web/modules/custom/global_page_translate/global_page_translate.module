@@ -1,46 +1,59 @@
 <?php
 
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\global_page_translate\Service\TranslateService;
+
 /**
  * Implements hook_theme().
  */
-function global_page_translate_theme() {
-  return [
-    'global_page_translate_button' => [
-      'template' => 'global-page-translate-button',
-    ],
-  ];
-}
+//function global_page_translate_theme() {
+//  return [
+//    'global_page_translate_button' => [
+//      'template' => 'global-page-translate-button',
+//    ],
+//  ];
+//}
 
 /**
  * Implements hook_page_attachments().
  */
 function global_page_translate_page_attachments(array &$attachments) {
-  // ✅ Solo se añade una vez la librería correcta:
-  $attachments['#attached']['library'][] = 'global_page_translate/translate_button';
+  \Drupal::logger('global_page_translate')->notice('Se agregó la librería de traducción.');
+  $attachments['#attached']['library'][] = 'global_page_translate/translate-button';
 }
 
 /**
  * Implements hook_block_info().
  */
-function global_page_translate_block_info() {
-  $blocks = [];
-  $blocks['global_translate_button'] = [
-    'info' => t('Botón de traducción global'),
-  ];
-  return $blocks;
-}
+//function global_page_translate_block_info() {
+//  $blocks = [];
+//  $blocks['global_translate_button'] = [
+//    'info' => t('Botón de traducción global'),
+//  ];
+//  return $blocks;
+//}
 
 /**
  * Implements hook_block_view().
  */
-function global_page_translate_block_view($delta = '') {
-  $block = [];
+//function global_page_translate_block_view($delta = '') {
+//  $block = [];
+//
+//  if ($delta == 'global_translate_button') {
+//    $block['content'] = [
+//      '#theme' => 'global_page_translate_button',
+//    ];
+//  }
+//
+//  return $block;
+//}
 
-  if ($delta == 'global_translate_button') {
-    $block['content'] = [
-      '#theme' => 'global_page_translate_button',
-    ];
-  }
-
-  return $block;
-}
+/**
+ * Implements hook_modules_installed().
+ */
+//function global_page_translate_modules_installed($modules) {
+//  if (in_array('global_page_translate', $modules) && \Drupal::moduleHandler()->moduleExists('big_pipe')) {
+//    \Drupal::service('module_installer')->uninstall(['big_pipe'], TRUE);
+//    \Drupal::logger('global_page_translate')->notice('Módulo BigPipe desactivado automáticamente por compatibilidad con la traducción HTML.');
+//  }
+//}
